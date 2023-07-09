@@ -1,0 +1,29 @@
+### 解题思路
+
+当数组长度小于等于2时，此时一定不会有重复两次以上的元素，直接返回数组长度即可。
+当数组长度大于2时，用slow来记录需要返回的数组长度，用fast来标记需要判断的元素，当slow前两个元素与fast所指元素相同时说明当前至少有三个元素重复，则fast所指的元素需要跳过，即fast++，如果两个元素不同，代表fast所指元素可以被接受，将fast所指元素移动到slow位置，并同时将二者后移一位。
+
+### 代码
+
+* java
+
+```java
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int n = nums.length;
+        if (n <= 2) {
+            return n;
+        }
+        int slow = 2, fast = 2;
+        while (fast < n) {
+            if (nums[slow - 2] != nums[fast]) {
+                nums[slow] = nums[fast];
+                ++slow;
+            }
+            ++fast;
+        }
+        return slow;
+    }
+}
+```
+

@@ -1,0 +1,21 @@
+[详细刷题视频合集](https://xiaochen1024.com/series/6196129fc1553b002e57bef5/6196208ec1553b002e57bef6)      
+[刷题笔记](https://xiaochen1024.com/courseware/60b4f11ab1aa91002eb53b18)
+这道题是26.删除排序数组中的重复项的变种。
+思路跟之前的题是一样的，26.删除排序数组中的重复项题解。定条件略有不同。除了比较nums[a]和nums[b]以外，还需要比较nums[a-1]和nums[b]，因为是最多两个相同。可以看代码注释，如果不懂可以草稿画图更容易理解。
+
+* 
+
+```
+var removeDuplicates = function(nums) {
+    if(nums.length < 3) return nums.length; //边界条件，数组长度小于3，必定符合重复项不超过2个的要求。
+    let b = 1; 
+    for(let a = 2; a < nums.length;a++){ //注意两个数组的起始位置
+        if(nums[a] !== nums[b] || (nums[a] === nums[b] && nums[a] !== nums[b-1])){ //后者判定条件允许了最多两个重复项
+            nums[++b] = nums[a]
+        };
+    };
+    return nums.slice(0,b+1).length;
+ };
+
+```
+
