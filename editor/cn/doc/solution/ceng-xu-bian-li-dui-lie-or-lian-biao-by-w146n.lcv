@@ -1,0 +1,78 @@
+[117. 填充每个节点的下一个右侧节点指针 II](https://leetcode.cn/problems/populating-next-right-pointers-in-each-node-ii/description/?orderBy=most_votes)
+
+在原二叉树的基础上，添加链表结构
+
+# 层序遍历+队列
+
+* []
+
+```Go
+func connect(root *Node) *Node {
+	if root == nil {return nil}
+    q := []*Node{root}
+    for len(q) > 0 {
+        qlen := len(q)
+        pre := &Node{}
+
+        for i := 0; i < qlen; i++ {
+            // 把q连接为list
+            n := q[0]
+            q = q[1:] // 此两行为q.pop()
+            if pre != nil {pre.Next = n} // pre == nil 即为本层第一个节点
+            pre = n
+
+            if n.Left != nil {q = append(q, n.Left)}
+            if n.Right != nil {q = append(q, n.Right)}
+        }
+    }
+    return root
+}
+```
+
+# 层序遍历+链表
+
+## 每层一次dummyHead的空间复杂度
+
+* []
+
+```Go
+func connect(root *Node) *Node {
+	if root == nil {return nil}
+    cur := root
+    for cur != nil { // 处理所有层
+        dummyHead := &Node{Val: -101} // 下一层链表头
+        pre := dummyHead
+        for cur != nil { // 处理这一层
+            if cur.Left != nil {pre.Next = cur.Left; pre = pre.Next}
+            if cur.Right != nil {pre.Next = cur.Right; pre = pre.Next}
+            cur = cur.Next
+        }
+        cur = dummyHead.Next // 开始下一层
+    }
+    return root
+}
+```
+
+## 各层共用dummyHead
+
+* []
+
+```Go
+func connect(root *Node) *Node {
+	if root == nil {return nil}
+    dummyHead := &Node{Val: -101} // 下一层链表头
+    cur := root
+    for cur != nil { // 处理所有层
+        pre := dummyHead
+        for cur != nil { // 处理这一层
+            if cur.Left != nil {pre.Next = cur.Left; pre = pre.Next}
+            if cur.Right != nil {pre.Next = cur.Right; pre = pre.Next}
+            cur = cur.Next
+        }
+        cur = dummyHead.Next // 开始下一层
+        dummyHead.Next = nil // 防止最后一层无限循环
+    }
+    return root
+}
+```
+

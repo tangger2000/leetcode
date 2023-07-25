@@ -1,0 +1,35 @@
+看了很多题解都是迭代，这里贴一个递归的
+
+* java
+
+```java
+class Solution {
+    public Node connect(Node root) {
+        if(root == null) return null;
+        if(root.left == null && root.right == null) return root;
+        Node next = getNode(root.next);
+        if(root.left != null && root.right != null){
+            root.left.next = root.right;
+            root.right.next = next;
+        } 
+        if(root.left != null && root.right == null)
+            root.left.next = next;
+        if(root.left == null && root.right != null)
+            root.right.next = next;
+        
+        // 注意：这里必须先遍历右子树！！否则你可以试试这个例子[2,1,3,0,7,9,1,null, null, null,1,null,null, 1]
+        connect(root.right);
+        connect(root.left);
+        
+        return root;
+    }
+
+    public Node getNode(Node root){
+        if(root == null) return null;
+        if(root.left != null) return root.left;
+        if(root.right != null) return root.right;
+        return getNode(root.next);
+    }
+}
+```
+

@@ -1,0 +1,39 @@
+* go
+
+```go
+/**
+ * Definition for a Node.
+ * type Node struct {
+ *     Val int
+ *     Left *Node
+ *     Right *Node
+ *     Next *Node
+ * }
+ */
+
+func connect(root *Node) *Node {
+    if root == nil{
+        return root
+    }
+    q := []*Node{root}
+    for i:=0;len(q)>0;i++{
+        p := []*Node{}
+        size := len(q)
+        for j:=0;j<size;j++{
+            node := q[j]
+            if j < size-1{
+                node.Next = q[j+1]
+            }
+            if node.Left != nil{
+                p = append(p, node.Left)
+            }
+            if node.Right != nil{
+                p = append(p, node.Right)
+            }
+        }
+        q = p
+    }
+    return root
+}
+```
+
