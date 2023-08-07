@@ -1,0 +1,95 @@
+> Problem: [315. 计算右侧小于当前元素的个数](https://leetcode.cn/problems/count-of-smaller-numbers-after-self/description/)
+
+[TOC]
+
+# 思路
+
+> 讲述看到这一题的思路
+
+# 解题方法
+
+> 描述你的解题方法
+
+# 复杂度
+
+- 时间复杂度:
+
+> 添加时间复杂度, 示例： $O(n)$
+
+- 空间复杂度:
+
+> 添加空间复杂度, 示例： $O(n)$
+
+# Code
+
+* []
+
+```Go
+
+var temp []int
+var index []int
+var tempIndex []int
+var ans []int
+func countSmaller(nums []int) []int {
+    if len(nums) == 0 {
+        return nums
+    }
+    index = make([]int, len(nums))
+    tempIndex = make([]int, len(nums))
+    ans = make([]int, len(nums))
+    temp = make([]int, len(nums))
+     for i := 0; i < len(nums); i++ {
+        index[i] = i
+    }
+    sort(&nums, 0, len(nums)-1)
+    return ans
+}
+
+
+// lo，hi 数组的左右边界索引
+func sort(nums *[]int, lo int, hi int) {
+    if lo == hi {
+        return
+    }
+
+    mid := (lo + hi) / 2
+    sort(nums, lo, mid)
+    sort(nums, mid+1, hi)
+    merge(nums, lo, mid, hi)
+}
+
+func merge(nums *[]int, lo, mid, hi int) {
+    // 左右两个数组的起始索引
+    i, j := lo, mid+1
+    
+    for p := lo; p <= hi; p++ {
+         // 左边数组已经排序完毕， 将右边数组的最后一个值赋值给数组最后一个元素
+        if i == mid + 1 {
+            temp[p] = (*nums)[j]
+            tempIndex[p] = index[j]
+            j++
+        } else if j == hi + 1 { // // 右边数组已经排序完毕， 将左边数组的最后一个值赋值给数组最后一个元素
+            temp[p] = (*nums)[i]
+            tempIndex[p] = index[i]
+            ans[index[i]] += j - mid -1
+            i++
+        } else if (*nums)[i] > (*nums)[j] { // 由大到小排序， 小的放到前面
+            temp[p] = (*nums)[j]
+            tempIndex[p] = index[j] 
+            j++
+        } else {
+            temp[p] =(*nums)[i]
+            tempIndex[p] = index[i]
+            ans[index[i]] += j - mid - 1 
+            i++
+        }
+    }
+    
+    for k := lo; k <= hi ; k++ {
+        (*nums)[k] = temp[k]
+        index[k] = tempIndex[k]
+    }
+}
+
+```
+
