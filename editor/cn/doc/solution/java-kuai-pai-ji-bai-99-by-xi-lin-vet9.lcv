@@ -1,0 +1,47 @@
+优化点：
+- 使用 `Random().nextInt()` 优于 `(int)Math.random()`
+- 假设 k 通常较小，因此 partition 时将所有不大于 pivot 的数都放在左边，这样可以加快搜索范围的缩小。
+
+* 
+
+```
+class Solution {
+    Random random = new Random();
+    
+    public int findKthLargest(int[] nums, int k) {
+        return quickselect(nums, 0, nums.length- 1, k);
+    }
+
+    private int quickselect(int[] nums, int l, int r, int k) {
+        int p = partition(nums, l, r);
+        int moreLen = r - p;
+
+        if (moreLen == k - 1) {
+            return nums[p];
+        }
+        return (moreLen > k - 1) ? quickselect(nums, p + 1, r, k) : quickselect(nums, l, p - 1, k - (moreLen + 1));
+    }
+
+    // return the pivot index
+    private int partition(int[] nums, int l, int r) {
+        swap(nums, r, l + random.nextInt(r - l + 1));
+        int less = l - 1;
+        int pivot = nums[r];
+        
+        for(int curr = l; curr < r; curr++){
+            if(nums[curr] <= pivot) {
+                swap(nums, ++less, curr);
+            }
+        }
+        swap(nums, ++less, r);
+        return less;
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
+```
+
